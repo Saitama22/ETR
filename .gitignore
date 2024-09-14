@@ -2,3 +2,8 @@
 /*/bin
 /*/obj
 /*.dll
+/ETRFront/etr-front/node_modules
+/etr-front/build
+/etr-front/node_modules
+/.vs
+/ETR/appsettings.Development.json
