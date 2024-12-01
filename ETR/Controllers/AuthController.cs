@@ -1,7 +1,9 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Policy;
 using System.Text;
 using System.Text.Encodings.Web;
+using System.Threading.Tasks;
 using ETR.Consts;
 using ETR.Handlers;
 using ETR.Handlers.Interface;
@@ -14,11 +16,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
-namespace ETR.Controllers
-{
-    public class AuthController : Controller {
+
+namespace ETR.Controllers {
+	public class AuthController : Controller {
 		private readonly IJwtAuthHandler _authHandler;
 		private readonly IMailHandler _mailHandler;
 
@@ -44,7 +45,7 @@ namespace ETR.Controllers
 				return BadRequest();
 
 			var confirmUrl = Url.Action("Confirm", "Auth", new { }, HttpContext.Request.Scheme);
-			await _mailHandler.SendMessageEmailConfirm(model.Email, confirmUrl);			
+			await _mailHandler.SendMessageEmailConfirm(model.Email, confirmUrl);
 
 			string token = await _authHandler.GenerateTokenAsync(new LoginDTO() {
 				Password = model.Password,
@@ -70,12 +71,12 @@ namespace ETR.Controllers
 		[HttpPost("change-password")]
 		public async Task<IActionResult> ChangePassword(PasswordChangeDTO passwordChangeDTO) {
 			if (!ModelState.IsValid)
-				return BadRequest();	
+				return BadRequest();
 			if (string.IsNullOrEmpty(User.Identity.Name))
 				return BadRequest();
 			if (!await _authHandler.ChangePassword(passwordChangeDTO, User.Identity.Name))
 				return BadRequest();
-			return Ok();				
+			return Ok();
 		}
 	}
 }

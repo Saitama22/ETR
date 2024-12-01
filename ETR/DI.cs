@@ -41,6 +41,8 @@ namespace ETR {
 
 
 		public static IServiceCollection AddDbContexts(this IServiceCollection services, string connection) {
+			// Добавление контекста базы данных в контейнер зависимостей
+			// Здесь настраивается подключение к базе данных с использованием строки подключения из конфигурации
 			services.AddDbContext<ETRMainDbContext>(options =>
 				options.UseNpgsql(connection));
 			return services;
